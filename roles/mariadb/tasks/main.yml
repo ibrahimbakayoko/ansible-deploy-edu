@@ -1,4 +1,3 @@
----
 - name: Installer MariaDB
   apt:
     name: mariadb-server
@@ -27,11 +26,11 @@
 
 - name: Configurer le mot de passe root
   shell: >
-    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
+    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ root_password }}';"
   become: yes
 
 - name: Créer l'utilisateur Ansible Admin
-  mysql_user:
+  community.mysql.mysql_user:
     login_user: root
     login_password: "{{ root_password }}"
     name: "{{ admin_user }}"
@@ -42,7 +41,7 @@
   become: yes
 
 - name: Créer la base de données
-  mysql_db:
+  community.mysql.mysql_db:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
     name: "{{ mariadb_database }}"
@@ -50,7 +49,7 @@
   become: yes
 
 - name: Créer l'utilisateur pour la base de données
-  mysql_user:
+  community.mysql.mysql_user:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
     name: "{{ mariadb_user }}"
