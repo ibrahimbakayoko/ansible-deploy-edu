@@ -1,26 +1,39 @@
+---
 - name: Installer MariaDB
   apt:
     name: mariadb-server
     state: present
   become: yes
 
-- name: Démarrer et activer MariaDB
+- name: Démarrer MariaDB
   service:
     name: mariadb
     state: started
     enabled: yes
   become: yes
 
-- name: Configurer MariaDB pour utiliser un mot de passe pour root
+- name: Tester la connexion avec root
+  mysql_db:
+    name: test_db
+    state: present
+    login_user: root
+    login_password: root
+  register: result
+  become: yes
+
+- name: Afficher le résultat du test de connexion
+  debug:
+    var: result
+
+- name: Configurer le mot de passe root
   shell: >
-    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ root_password }}';"
+    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
   become: yes
 
 - name: Créer l'utilisateur Ansible Admin
   mysql_user:
     login_user: root
     login_password: "{{ root_password }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ admin_user }}"
     password: "{{ admin_password }}"
     priv: "*.*:ALL"
@@ -28,20 +41,18 @@
     state: present
   become: yes
 
-- name: Créer la base de données "{{ mariadb_database }}"
+- name: Créer la base de données
   mysql_db:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mariadb_database }}"
     state: present
   become: yes
 
-- name: Créer l'utilisateur "{{ mariadb_user }}"
+- name: Créer l'utilisateur pour la base de données
   mysql_user:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mariadb_user }}"
     password: "{{ mariadb_password }}"
     priv: "{{ mariadb_database }}.*:ALL"

@@ -1,6 +1,9 @@
-root_password: "root"  # Définir la variable ici
-admin_user: "root"
-admin_password: "root"
-mariadb_database: "eduplateforme"
-mariadb_user: "eduplateforme"
-mariadb_password: "eduplateforme"
+# Variables pour la configuration de MariaDB
+root_password: "root"  # Mot de passe pour l'utilisateur root
+admin_user: "ansible_admin"  # Nom de l'utilisateur administrateur
+admin_password: "admin_password"  # Mot de passe de l'utilisateur administrateur
+
+# Variables pour la base de données
+mariadb_database: "eduplateforme"  # Nom de la base de données à créer
+mariadb_user: "eduplateforme"  # Nom de l'utilisateur pour la base de données
+mariadb_password: "eduplateforme"  # Mot de passe de l'utilisateur de la base de données
