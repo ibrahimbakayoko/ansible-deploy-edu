@@ -11,10 +11,15 @@
     enabled: yes
   become: yes
 
+- name: Configurer MariaDB pour utiliser un mot de passe pour root
+  shell: >
+    mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
+  become: yes
+
 - name: Créer l'utilisateur Ansible Admin
   mysql_user:
     login_user: root
-    login_unix_socket: /var/run/mysqld/mysqld.sock  # Utilisation du socket Unix pour l'authentification
+    login_password: "{{ root_password }}"  # Connexion avec le mot de passe root
     name: "{{ admin_user }}"
     password: "{{ admin_password }}"
     priv: "*.*:ALL"
