@@ -1,4 +1,5 @@
-mariadb_version: "10.5"
-mariadb_user: "eduplateforme"
-mariadb_password: "Edu@1234"
-mariadb_database: "eduplateforme"
+mariadb_user: eduplateforme
+mariadb_password: "eduplateforme"
+mariadb_database: eduplateforme
+admin_user: ansible_admin
+admin_password: "Ansible@1234"

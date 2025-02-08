@@ -1,38 +1,42 @@
-- name: Mettre à jour le cache APT
-  apt:
-    update_cache: yes
-
-- name: Installer MariaDB depuis les dépôts Debian
+---
+- name: Installer MariaDB
   apt:
     name: mariadb-server
     state: present
+  become: yes
 
 - name: Démarrer et activer MariaDB
   service:
     name: mariadb
     state: started
     enabled: yes
+  become: yes
 
-- name: Sécuriser MariaDB (désactiver root remote login)
+- name: Créer l'utilisateur Ansible Admin
   mysql_user:
-    name: root
-    host: "{{ item }}"
-    password: ""
-    state: absent
-  with_items:
-    - "127.0.0.1"
-    - "::1"
-    - "localhost"
+    login_user: root
+    name: "{{ admin_user }}"
+    password: "{{ admin_password }}"
+    priv: "*.*:ALL"
+    host: "localhost"
+    state: present
+  become: yes
 
 - name: Créer la base de données "{{ mariadb_database }}"
   mysql_db:
+    login_user: "{{ admin_user }}"
+    login_password: "{{ admin_password }}"
     name: "{{ mariadb_database }}"
     state: present
+  become: yes
 
 - name: Créer l'utilisateur "{{ mariadb_user }}"
   mysql_user:
+    login_user: "{{ admin_user }}"
+    login_password: "{{ admin_password }}"
     name: "{{ mariadb_user }}"
     password: "{{ mariadb_password }}"
     priv: "{{ mariadb_database }}.*:ALL"
     host: "%"
     state: present
+  become: yes
