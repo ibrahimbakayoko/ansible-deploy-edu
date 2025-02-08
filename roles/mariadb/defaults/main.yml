@@ -1,6 +1,5 @@
-# vars.yml
-admin_user: "admin_user"
-admin_password: "admin_password"
-mariadb_database: "eduplateforme"
-mariadb_user: "eduplateforme"
-mariadb_password: "eduplateforme"
+mariadb_version: "10.5"
+galera_cluster_name: "galera_cluster"
+galera_cluster_nodes: "gcomm://172.17.0.3,172.17.0.4,172.17.0.5"
+galera_node_address: "{{ ansible_host }}"
+galera_sst_method: "rsync"
