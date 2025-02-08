@@ -1,6 +1,6 @@
 root_password: "root"  # Définir la variable ici
-admin_user: "ansible"
-admin_password: "ansible"
+admin_user: "root"
+admin_password: "root"
 mariadb_database: "eduplateforme"
 mariadb_user: "eduplateforme"
 mariadb_password: "eduplateforme"
