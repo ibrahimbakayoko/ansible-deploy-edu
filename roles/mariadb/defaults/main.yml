@@ -1,3 +1,4 @@
----
-mariadb_root_password: "RootPass123!"
-mariadb_user_password: "eduplateforme"
+mariadb_version: "10.5"
+mariadb_user: "eduplateforme"
+mariadb_password: "Edu@1234"
+mariadb_database: "eduplateforme"
