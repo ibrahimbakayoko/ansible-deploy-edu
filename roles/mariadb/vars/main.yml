@@ -1,6 +1,6 @@
-# vars.yml
-admin_user: "admin_user"
-admin_password: "admin_password"
+root_password: "root"  # Définir la variable ici
+admin_user: "ansible"
+admin_password: "ansible"
 mariadb_database: "eduplateforme"
 mariadb_user: "eduplateforme"
 mariadb_password: "eduplateforme"
