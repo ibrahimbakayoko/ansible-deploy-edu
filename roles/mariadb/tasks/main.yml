@@ -13,7 +13,7 @@
 
 - name: Configurer MariaDB pour utiliser un mot de passe pour root
   shell: >
-    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
+    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ root_password }}';"
   become: yes
 
 - name: Créer l'utilisateur Ansible Admin
