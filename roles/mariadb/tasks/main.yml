@@ -11,12 +11,23 @@
     enabled: yes
   become: yes
 
+- name: Créer le fichier de configuration pour MariaDB
+  copy:
+    dest: "/root/.my.cnf"
+    content: |
+      [client]
+      user=root
+      password="{{ root_password }}"
+    owner: root
+    group: root
+    mode: '0600'
+  become: yes
+  when: root_password is defined
+
 - name: Tester la connexion avec root
   mysql_db:
     name: test_db
     state: present
-    login_user: root
-    login_password: root
   register: result
   become: yes
 
@@ -26,11 +37,11 @@
 
 - name: Configurer le mot de passe root
   shell: >
-    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ root_password }}';"
+    mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password }}';"
   become: yes
 
 - name: Créer l'utilisateur Ansible Admin
-  community.mysql.mysql_user:
+  mysql_user:
     login_user: root
     login_password: "{{ root_password }}"
     name: "{{ admin_user }}"
@@ -41,7 +52,7 @@
   become: yes
 
 - name: Créer la base de données
-  community.mysql.mysql_db:
+  mysql_db:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
     name: "{{ mariadb_database }}"
@@ -49,7 +60,7 @@
   become: yes
 
 - name: Créer l'utilisateur pour la base de données
-  community.mysql.mysql_user:
+  mysql_user:
     login_user: "{{ admin_user }}"
     login_password: "{{ admin_password }}"
     name: "{{ mariadb_user }}"
@@ -58,3 +69,65 @@
     host: "%"
     state: present
   become: yes
+
+
+# - name: Installer MariaDB
+#   apt:
+#     name: mariadb-server
+#     state: present
+#   become: yes
+
+# - name: Démarrer MariaDB
+#   service:
+#     name: mariadb
+#     state: started
+#     enabled: yes
+#   become: yes
+
+# - name: Tester la connexion avec root
+#   mysql_db:
+#     name: test_db
+#     state: present
+#     login_user: root
+#     login_password: root
+#   register: result
+#   become: yes
+
+# - name: Afficher le résultat du test de connexion
+#   debug:
+#     var: result
+
+# - name: Configurer le mot de passe root
+#   shell: >
+#     mariadb --socket=/var/run/mysqld/mysqld.sock -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ root_password }}';"
+#   become: yes
+
+# - name: Créer l'utilisateur Ansible Admin
+#   community.mysql.mysql_user:
+#     login_user: root
+#     login_password: "{{ root_password }}"
+#     name: "{{ admin_user }}"
+#     password: "{{ admin_password }}"
+#     priv: "*.*:ALL"
+#     host: "localhost"
+#     state: present
+#   become: yes
+
+# - name: Créer la base de données
+#   community.mysql.mysql_db:
+#     login_user: "{{ admin_user }}"
+#     login_password: "{{ admin_password }}"
+#     name: "{{ mariadb_database }}"
+#     state: present
+#   become: yes
+
+# - name: Créer l'utilisateur pour la base de données
+#   community.mysql.mysql_user:
+#     login_user: "{{ admin_user }}"
+#     login_password: "{{ admin_password }}"
+#     name: "{{ mariadb_user }}"
+#     password: "{{ mariadb_password }}"
+#     priv: "{{ mariadb_database }}.*:ALL"
+#     host: "%"
+#     state: present
+#   become: yes
