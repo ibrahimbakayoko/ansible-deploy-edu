@@ -1,19 +1,4 @@
-# Variables pour MariaDB
+---
+# Fichier : vars/main.yml
 
-# Mot de passe pour l'utilisateur root MariaDB
-root_password: "root"
-
-# Utilisateur administrateur pour Ansible
-admin_user: "ansible"
-
-# Mot de passe pour l'utilisateur administrateur
-admin_password: "ansible"
-
-# Nom de la base de données à créer
-mariadb_database: "eduplateforme"
-
-# Utilisateur pour la base de données
-mariadb_user: "eduplateforme"
-
-# Mot de passe pour l'utilisateur de la base de données
-mariadb_password: "eduplateforme"
+mariadb_root_password: "root"  # Par exemple, un mot de passe root pour MariaDB

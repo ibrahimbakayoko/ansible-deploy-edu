@@ -1,5 +1,5 @@
-mariadb_version: "10.5"
-galera_cluster_name: "galera_cluster"
-galera_cluster_nodes: "gcomm://172.17.0.3,172.17.0.4,172.17.0.5"
-galera_node_address: "{{ ansible_host }}"
-galera_sst_method: "rsync"
+---
+# Fichier : defaults/main.yml
+
+mariadb_package: mariadb-server  # Paquet à installer
+mariadb_service: mariadb         # Service à démarrer
